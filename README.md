@@ -121,6 +121,11 @@ For Windows Builds
 
 "make" must be installed. It is recommended to install the Cygwin and "make" must be selected to be included in the installation. After the installation, please add the Cygwin bin path to your PATH.
 
+First run (or if autobuild fails):
+```
+make gmp-platform
+```
+
 openh264/build/AutoBuildForWindows.bat is provided to help compile the libraries on Windows platform.  
 Usage of the .bat script:  
 

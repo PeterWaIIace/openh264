@@ -1,5 +1,9 @@
 #!/bin/bash
-git rev-list HEAD | sort > config.git-hash
+git rev-list HEAD | sort | uniq > config.git-hash
+if [ $? -ne 0 ]; then
+    echo "Failed to create config.git-hash. Ensure you are in a Git repository."
+    exit 1
+fi
 SRC_PATH=$1
 LOCALVER=`wc -l config.git-hash | awk '{print $1}'`
 if [ $LOCALVER \> 1 ] ; then

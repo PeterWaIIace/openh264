@@ -7,7 +7,8 @@ vpath %.S $(SRC_PATH)
 vpath %.rc $(SRC_PATH)
 vpath %.pc.in $(SRC_PATH)
 
-OS=$(shell uname | tr A-Z a-z | tr -d \\-0-9. | sed -E 's/^(net|open|free)bsd/bsd/')
+# OS=$(shell uname | tr A-Z a-z | tr -d \\-0-9. | sed -E 's/^(net|open|free)bsd/bsd/')
+OS=cygwin_nt
 ARCH=$(shell uname -m)
 LIBPREFIX=lib
 LIBSUFFIX=a
@@ -96,7 +97,7 @@ endif
 
 MODULE := $(LIBPREFIX)$(MODULE_NAME).$(SHAREDLIBSUFFIX)
 
-CFLAGS += -DGENERATED_VERSION_HEADER
+# CFLAGS += -DGENERATED_VERSION_HEADER
 LDFLAGS +=
 
 ifeq (Yes, $(GCOV))
@@ -172,11 +173,11 @@ COMMON_UNITTEST_CFLAGS += $(CODEC_UNITTEST_CFLAGS)
 
 .PHONY: test gtest-bootstrap clean $(PROJECT_NAME).pc $(PROJECT_NAME)-static.pc
 
-generate-version:
-	$(QUIET)sh $(SRC_PATH)codec/common/generate_version.sh $(SRC_PATH)
+# generate-version:
+# 	$(QUIET)sh $(SRC_PATH)codec/common/generate_version.sh $(SRC_PATH)
 
-codec/decoder/plus/src/welsDecoderExt.$(OBJ): | generate-version
-codec/encoder/plus/src/welsEncoderExt.$(OBJ): | generate-version
+# codec/decoder/plus/src/welsDecoderExt.$(OBJ): | generate-version
+# codec/encoder/plus/src/welsEncoderExt.$(OBJ): | generate-version
 
 clean:
 ifeq (android,$(OS))

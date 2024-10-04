@@ -97,6 +97,15 @@ goto :EOF
   set MinGWPath=C:\MinGW\bin
   set MsysPath=C:\MinGW\msys\1.0\bin
 
+  set VC17BuildToolsPath=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\VC
+  set VC17CommunityPath=C:\Program Files (x86)\Microsoft Visual Studio\2022\Community\VC
+  set VC17ProfessionalPath=C:\Program Files (x86)\Microsoft Visual Studio\2022\Professional\VC
+  set VC17EnterprisePath=C:\Program Files (x86)\Microsoft Visual Studio\2022\Enterprise\VC
+  if exist "%VC17BuildToolsPath%" set VC17PATH=%VC17BuildToolsPath%
+  if exist "%VC17CommunityPath%" set VC17PATH=%VC17CommunityPath%
+  if exist "%VC17ProfessionalPath%" set VC17PATH=%VC17ProfessionalPath%
+  if exist "%VC17EnterprisePath%" set VC17PATH=%VC17EnterprisePath%
+
   set VC16BuildToolsPath=C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC
   set VC16CommunityPath=C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC
   set VC16ProfessionalPath=C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC
@@ -130,8 +139,9 @@ goto :EOF
   set VCVARSPATH=%VCPATH%
   if exist "%VC15Path%"    set VCVARSPATH=%VC15Path%\Auxiliary\Build
   if exist "%VC16Path%"    set VCVARSPATH=%VC16Path%\Auxiliary\Build
+  if exist "%VC17Path%"    set VCVARSPATH=%VC17Path%\Auxiliary\Build
 
-  if /I "%OPENH264_VC_VERSION%" == "VC15" (
+if /I "%OPENH264_VC_VERSION%" == "VC15" (
     set VCPATH=
     set "VCVARSPATH=%VC15Path%\Auxiliary\Build"
 ) else if /I "%OPENH264_VC_VERSION%" == "VC12" (
@@ -152,6 +162,8 @@ goto :EOF
   if "%vArcType%" =="x86_64" set "PATH=%MinGWPath%;%MsysPath%;%VCPATH_BIN%;%GitPath%;%PATH%"
   if "%vArcType%" =="arm64"  set "PATH=%MinGWPath%;%MsysPath%;%VCPATH_BIN%;%GitPath%;%CLANG_BIN%;%PATH%"
 
+  ECHO VC17Path: %VC17Path%
+  ECHO VCVARSPATH: %VCVARSPATH%
   if "%vArcType%" =="i386"   call "%VCVARSPATH%\vcvarsall.bat" x86 %OPENH264_WINSDK_VERSION%
   if "%vArcType%" =="x86_64" call "%VCVARSPATH%\vcvarsall.bat" x64 %OPENH264_WINSDK_VERSION%
   if "%vArcType%" =="arm64"  (
@@ -394,6 +406,7 @@ rem ***********************************************
   echo      [vc_version] : Specify a VC++ version
   echo                     VC16 for VC++ 2019
   echo                     VC15 for VC++ 2017
+  echo                     VC17 for VC++ 2022
 
   echo *******************************************************************************
 goto :EOF
@@ -442,6 +455,8 @@ goto :EOF
   echo DestDir is %DestDir%
   set aFileList=%DllFile% %LibFile% %PDBFile% %UTBinFile% %EncBinFile% %DecBinFile%
   for %%k in (%aFileList%) do (
+    echo copying %%k to %DestDir%
+    @REM copy /Y %%k %DestDir%
     bash -c "cp -f  %%k  %DestDir%"
   )
   cd %WorkingDir%
